@@ -1,0 +1,88 @@
+#include<bits/stdc++.h>
+using namespace std;
+#define mod 1000000007
+#define  rep(i,b) for (ll i =1; i <= (b); i++)
+#define  rrep(i,b) for (ll i =b; i> 0; i--)
+#define  repp(i,b) for (ll i =0; i < (b); i++)
+#define  rrepp(i,b) for (ll i =b; i >=0; i--)
+#define test int t; cin>>t; while(t--)
+#define fio ios_base::sync_with_stdio(false);
+#define test int t; cin>>t; while(t--)
+#define pb push_back
+#define fp(i) fixed<<setprecision(i)
+#define s(n) scanf("%lld",&n)
+#define F first
+#define S second
+#define endl '\n'
+#define mp(a,b) make_pair(a,b)
+#define all(v) v.begin(),v.end()
+#define pll pair<ll, ll>
+#define vpll vector<pll>
+#define vbll vector<bool>
+#define vvll vector<vll>
+#define show(A) for (auto i: A) cout << i << " "; cout << '\n';
+typedef long long  int ll;
+typedef unsigned long long int ull;
+typedef long double ld;
+typedef vector <ll> vll;
+ll trie[1000006][27];
+ll dp[5006];
+bool stop[1000006];
+ll c = 0;
+void insert(string ss) {
+  ll node = 0;
+  repp(i, ss.length()) {
+    if (!trie[node][ss[i] - 'a']) {
+      trie[node][ss[i] - 'a'] = ++c;
+    }
+    node = trie[node][ss[i] - 'a'];
+  }
+  stop[node] = 1;
+}
+string s;
+ll search(ll n) {
+  ll ans = 0, node = 0;
+  for (ll i = n; i < s.size(); i++) {
+    if (!trie[node][s[i] - 'a'])return ans;
+    node = trie[node][s[i] - 'a'];
+    if (stop[node]) {
+      ans += (dp[i + 1] % mod);
+      ans %= mod;
+    }
+  }
+  return ans;
+}
+void solve() {
+  // cout << "fukc" << endl;
+  cin >> s;
+  ll k;
+  cin >> k;
+  repp(i, k) {
+    string tmp;
+    cin >> tmp;
+    insert(tmp);
+  }
+  // repp(i, 7) {
+  //   repp(j, 5)cout << trie[i][j] << " ";
+  //   cout << endl;
+  // }
+  dp[s.size()] = 1;
+  for (ll i = s.size() - 1; i >= 0; i--) {
+    dp[i] = search(i) % mod;
+    // cout << dp[i] << endl;
+  }
+  cout << dp[0] % mod << endl;
+}
+int main() {
+#ifndef ONLINE_JUDGE
+  freopen("input.txt", "r", stdin);
+  freopen("output.txt", "w", stdout);
+#else
+// online submission
+#endif
+  // test
+  solve();
+  return 0;
+}
+
+
